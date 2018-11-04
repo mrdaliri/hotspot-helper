@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 ## Hotspot Helper
 ## Bash script for logging in and logging out into captive portals (hotspots)
 ## Currently only MikroTik RouterOS (UserManager package) is supported
