@@ -17,7 +17,7 @@
 HOTSPOT="https://hotspot.um.ac.ir"
 
 doLogin() {
-    response=$(curl -sS "${HOTSPOT}/login" -H 'Connection: keep-alive' -H 'Cache-Control: max-age=0' -H "Origin: ${HOTSPOT}" -H 'Content-Type: application/x-www-form-urlencoded' -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9' -H 'User-Agent: Mozilla/5.0 (compatible; MSIE 10.0; Macintosh; Intel Mac OS X 10_7_3; Trident/6.0)' -H "Referer: ${HOTSPOT}/login" -H 'Accept-Language: en-US,en;q=0.9' --data "dst=&popup=true&username=${username}+&password=${password}");
+    response=$(curl -sS "${HOTSPOT}/login" -H 'Connection: keep-alive' -H 'Cache-Control: max-age=0' -H "Origin: ${HOTSPOT}" -H 'Content-Type: application/x-www-form-urlencoded' -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9' -H 'User-Agent: Mozilla/5.0 (compatible; MSIE 10.0; Macintosh; Intel Mac OS X 10_7_3; Trident/6.0)' -H "Referer: ${HOTSPOT}/login" -H 'Accept-Language: en-US,en;q=0.9' --data "dst=&popup=true&username=${1}+&password=${2}");
 
     if [ $? != 0 ]; then
         echo "Connection to hotspot failed."
@@ -44,6 +44,20 @@ doLogout() {
     fi
 }
 
+# https://github.com/rvm/rvm/blob/master/scripts/functions/rvmrc
+_md5() {
+  if builtin command -v md5 > /dev/null; then
+    echo -n "$1" | md5
+  elif builtin command -v md5sum > /dev/null ; then
+    echo -n "$1" | md5sum | awk '{print $1}'
+  else
+    rvm_error "Neither md5 nor md5sum were found in the PATH"
+    return 1
+  fi
+
+  return 0
+}
+
 action=$1
 if [ -z "$action" ]; then
     echo 'No argument supplied!'
@@ -56,5 +70,5 @@ else
     read -sp "Hotspot Password: " password
 
     printf '\n\n'
-    doLogin username password
+    doLogin $username $(_md5 ${password})
 fi
