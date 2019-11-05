@@ -13,6 +13,10 @@ First add executable permission:
 
     ./hotspot.sh USERNAME
 
+**In order to check status:**
+
+    ./hotspot.sh --status
+
 **To log out:**
 
     ./hotspot.sh --logout

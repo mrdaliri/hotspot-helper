@@ -4,8 +4,9 @@
 ## Currently only MikroTik RouterOS (UserManager package) is supported
 ##
 ## Version 1.0
-## 
+##
 ## Usage: To log in:  ./hotspot.sh USERNAME (it will ask for password, your password is hidden)
+##        To check status: ./hotspot.sh --status
 ##        To log out: ./hotspot.sh --logout
 ##
 ## Created by Mohamamd-Reza Daliri
@@ -29,6 +30,17 @@ doLogin() {
         echo "Error: ${error}"
         exit 1
     fi
+}
+
+doCheckStatus() {
+    response=$(curl -s ifconfig.co);
+    if [ $? == 0 ]; then
+        echo "Your IP: ${response}"
+        exit 1
+    else
+        echo "Not Connected!"
+        exit 1
+    fi;
 }
 
 doLogout() {
@@ -62,6 +74,8 @@ action=$1
 if [ -z "$action" ]; then
     echo 'No argument supplied!'
     exit 1
+elif [ "$action" = "--status" ]; then
+    doCheckStatus    
 elif [ "$action" = "--logout" ]; then
     doLogout
 else
